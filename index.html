@@ -1,524 +1,345 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tervo Store</title>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Tamarind Lane Café</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
--webkit-tap-highlight-color:transparent;
-user-select:none;
+/* Layout: left-aligned editorial cafe page. Deep-green hero band with a top-down cup, menu in two columns, hours with a live open/closed status. */
+:root {
+  --bg: #F2F4EC;
+  --surface: #E5EADD;
+  --fg: #15241D;
+  --muted: #4F5F57;
+  --line: #C6D0C0;
+  --brand: #1E4B3C;
+  --on-brand: #F2F4EC;
+  --accent: #C98A1B;
+  --open: #2E7D4F;
+  --closed: #A8442F;
+  --cup: #F2F4EC;
+  --coffee: #5A3A24;
+  --font-display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1814; --surface: #172420; --fg: #E7ECE2; --muted: #9BAAA1; --line: #2A3A33;
+    --brand: #1B3A30; --on-brand: #F2F4EC; --accent: #E3A94B; --open: #5CC184; --closed: #E58A73;
+    --cup: #E7ECE2; --coffee: #7A5236;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1814; --surface: #172420; --fg: #E7ECE2; --muted: #9BAAA1; --line: #2A3A33;
+  --brand: #1B3A30; --on-brand: #F2F4EC; --accent: #E3A94B; --open: #5CC184; --closed: #E58A73;
+  --cup: #E7ECE2; --coffee: #7A5236;
+  color-scheme: dark;
 }
 
-html{scroll-behavior:smooth;}
+*, *::before, *::after { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.05; }
+p { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 
-body{
-background:
-radial-gradient(circle at top right, rgba(185,212,78,0.12), transparent 35%),
-radial-gradient(circle at bottom left, rgba(185,212,78,0.08), transparent 30%),
-linear-gradient(180deg,#050505 0%, #0a0f05 40%, #111707 100%);
-color:white;
+.wrap {
+  max-width: 1100px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
+.label { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
 
-.top-strip{
-width:100%;
-background:#111;
-overflow:hidden;
-padding:8px 0;
-border-bottom:1px solid rgba(255,255,255,0.08);
-}
+/* top bar */
+.bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-block: 18px; }
+.brand { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; text-decoration: none; letter-spacing: -0.01em; }
+.bar nav { display: flex; gap: 20px; flex-wrap: wrap; }
+.bar nav a { text-decoration: none; font-weight: 500; font-size: 0.95rem; color: var(--muted); }
+.bar nav a:hover { color: var(--fg); text-decoration: underline; text-underline-offset: 4px; }
 
-.top-strip-content{
-display:flex;
-width:max-content;
-animation:run 10s linear infinite;
-}
+/* hero */
+.hero { background: var(--brand); color: var(--on-brand); }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); gap: 32px; align-items: center; padding-block: 56px 64px; }
+.hero .label { color: color-mix(in srgb, var(--on-brand) 70%, transparent); }
+.hero h1 { font-weight: 800; font-size: clamp(2.8rem, 9vw, 6rem); letter-spacing: -0.035em; margin-top: 14px; }
+.hero h1 span { color: var(--accent); }
+.hero p.lede { max-width: 46ch; margin-top: 20px; font-size: 1.125rem; color: color-mix(in srgb, var(--on-brand) 88%, transparent); }
+.status { display: inline-flex; align-items: center; gap: 10px; margin-top: 28px; padding: 9px 14px; border: 1px solid color-mix(in srgb, var(--on-brand) 35%, transparent); border-radius: 999px; font-family: var(--font-mono); font-size: 0.85rem; }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--closed); flex: none; }
+.status[data-state="open"] .dot { background: var(--open); }
+.cup { width: 100%; max-width: 340px; justify-self: end; height: auto; }
+.cup .saucer { fill: color-mix(in srgb, var(--on-brand) 14%, transparent); }
+.cup .body { fill: var(--cup); }
+.cup .coffee { fill: var(--coffee); }
+.cup .art { fill: none; stroke: var(--cup); stroke-width: 5; stroke-linecap: round; opacity: 0.9; }
+.cup .accent { fill: var(--accent); }
 
-.top-strip-content span{
-color:#b9d44e;
-font-size:14px;
-font-weight:bold;
-white-space:nowrap;
-padding-right:50px;
-}
+/* sections */
+section { padding-block: 72px 8px; }
+.head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 36px; }
+.head h2 { font-size: clamp(2rem, 5vw, 3.25rem); letter-spacing: -0.025em; font-weight: 800; }
+.head p { color: var(--muted); max-width: 52ch; }
 
-@keyframes run{
-0%{transform:translateX(100%);}
-100%{transform:translateX(-100%);}
-}
+/* menu */
+.menu { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px 56px; }
+.group h3 { font-size: 1.5rem; font-weight: 700; padding-bottom: 12px; border-bottom: 2px solid var(--fg); display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.group h3 small { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.item b { font-weight: 600; }
+.item .price { font-family: var(--font-mono); font-weight: 500; font-variant-numeric: tabular-nums; }
+.item .desc { grid-column: 1 / -1; color: var(--muted); font-size: 0.95rem; max-width: 52ch; }
+.tag { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; margin-left: 8px; border-radius: 4px; background: var(--accent); color: #15241D; vertical-align: 2px; }
+.note { margin-top: 28px; color: var(--muted); font-size: 0.9rem; }
 
-.container{
-width:90%;
-max-width:700px;
-margin:auto;
-padding:30px 0;
-}
+/* about */
+.about { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px 64px; align-items: start; }
+.about .copy { display: flex; flex-direction: column; gap: 16px; max-width: 56ch; }
+.facts { display: grid; gap: 0; margin: 0; }
+.facts div { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.facts div:first-child { border-top: 1px solid var(--line); }
+.facts dt { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+.facts dd { margin: 0; }
 
-.badge{
-display:inline-block;
-padding:10px 18px;
-border:1px solid #b9d44e;
-border-radius:30px;
-color:#b9d44e;
-margin-bottom:20px;
-font-weight:bold;
-}
+/* visit */
+.visit { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; }
+.panel { background: var(--surface); padding: 28px; border-radius: 6px; min-width: 0; }
+.panel h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 18px; }
+.hours { display: grid; margin: 0; }
+.hours div { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.hours div:last-child { border-bottom: 0; }
+.hours dt { font-weight: 500; }
+.hours dd { margin: 0; font-family: var(--font-mono); font-size: 0.92rem; font-variant-numeric: tabular-nums; text-align: right; }
+.hours .today { font-weight: 700; }
+.hours .today dt::after { content: "Today"; margin-left: 10px; font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; background: var(--brand); color: var(--on-brand); vertical-align: 2px; }
+.contact { display: flex; flex-direction: column; gap: 20px; }
+.contact p { overflow-wrap: anywhere; }
+.row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.mono { font-family: var(--font-mono); }
+.btn { font: inherit; font-size: 0.85rem; font-weight: 600; padding: 7px 14px; border-radius: 999px; border: 1.5px solid var(--fg); background: transparent; color: var(--fg); cursor: pointer; }
+.btn:hover { background: var(--fg); color: var(--bg); }
 
-h1{
-font-size:70px;
-line-height:70px;
-font-weight:900;
-}
+footer { margin-top: 80px; border-top: 1px solid var(--line); }
+footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-block: 24px 32px; color: var(--muted); font-size: 0.9rem; }
 
-.green{color:#b9d44e;}
-
-.tag{
-font-size:28px;
-font-weight:bold;
-margin:20px 0;
-}
-
-.main-shirt{
-width:100%;
-max-width:500px;
-display:block;
-margin:25px auto;
-border-radius:20px;
-}
-
-.gallery{
-display:flex;
-justify-content:center;
-gap:15px;
-margin-bottom:25px;
-}
-
-.gallery img{
-width:90px;
-border-radius:15px;
-cursor:pointer;
-border:2px solid transparent;
-transition:.3s;
-}
-
-.gallery img:hover{
-border-color:#b9d44e;
-transform:scale(1.05);
-}
-
-.size-box{
-display:flex;
-gap:12px;
-margin:25px 0;
-flex-wrap:wrap;
-}
-
-.size{
-width:60px;
-height:60px;
-display:flex;
-justify-content:center;
-align-items:center;
-border:2px solid #b9d44e;
-border-radius:12px;
-font-size:20px;
-font-weight:bold;
-cursor:pointer;
-background:transparent;
-color:white;
-}
-
-.size.active{
-background:#b9d44e;
-color:black;
-}
-
-.price-box{
-margin:20px 0;
-text-align:center;
-}
-
-.price-box h2{
-font-size:42px;
-color:#b9d44e;
-}
-
-.price-box span{
-font-size:24px;
-color:#777;
-text-decoration:line-through;
-margin-left:10px;
-}
-
-.price-box p{
-color:#ffcc00;
-margin-top:8px;
-font-size:16px;
-font-weight:bold;
-}
-
-.cart-btn{
-width:100%;
-padding:20px;
-font-size:26px;
-font-weight:bold;
-background:linear-gradient(135deg,#b9d44e,#d4ff5c);
-border:none;
-border-radius:18px;
-cursor:pointer;
-box-shadow:0 0 25px #b9d44e;
-margin:25px 0;
-}
-
-.box,.testimonial{
-background:#111;
-padding:20px;
-border-radius:20px;
-margin-top:30px;
-border:1px solid rgba(255,255,255,0.06);
-}
-
-.box h2{
-color:#b9d44e;
-margin-bottom:20px;
-}
-
-.detail{
-display:flex;
-justify-content:space-between;
-margin:12px 0;
-color:#ccc;
-}
-
-.feature{
-display:flex;
-align-items:center;
-gap:15px;
-margin:20px 0;
-padding:15px;
-background:#111;
-border-radius:15px;
-border:1px solid rgba(255,255,255,0.06);
-}
-
-.feature-icon{
-font-size:28px;
-color:#b9d44e;
-}
-
-.feature-text h3{
-font-size:20px;
-}
-
-.feature-text p{
-color:#999;
-font-size:15px;
-margin-top:5px;
-}
-
-.review{
-margin:20px 0;
-}
-
-.bar{
-width:100%;
-height:8px;
-background:#222;
-border-radius:10px;
-overflow:hidden;
-margin-top:8px;
-}
-
-.fill{height:100%;}
-
-.rating-card{
-background:linear-gradient(135deg,#7fa22f,#b9d44e);
-padding:30px;
-border-radius:20px;
-text-align:center;
-margin-bottom:25px;
-color:black;
-}
-
-.input-box{
-width:100%;
-padding:16px;
-margin:10px 0;
-border-radius:12px;
-border:1px solid #333;
-background:#0f0f0f;
-color:white;
-}
-
-.input-box:focus{
-border-color:#b9d44e;
-outline:none;
-}
-
-.success-popup{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.92);
-display:none;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-z-index:9999;
-}
-
-.success-circle{
-width:130px;
-height:130px;
-border-radius:50%;
-background:linear-gradient(135deg,#b9d44e,#d4ff5c,#9fff33);
-display:flex;
-justify-content:center;
-align-items:center;
-box-shadow:0 0 45px #b9d44e;
-animation:pop .6s ease;
-}
-
-.success-check{
-font-size:65px;
-font-weight:bold;
-color:black;
-}
-
-.success-title{
-font-size:30px;
-font-weight:bold;
-margin-top:20px;
-color:#b9d44e;
-}
-
-.success-sub{
-font-size:16px;
-margin-top:10px;
-color:#ddd;
-}
-
-@keyframes pop{
-0%{transform:scale(0);}
-70%{transform:scale(1.15);}
-100%{transform:scale(1);}
+@media (max-width: 760px) {
+  .hero .wrap { grid-template-columns: minmax(0, 1fr); padding-block: 40px 48px; }
+  .cup { justify-self: start; max-width: 220px; order: -1; }
+  .menu, .about, .visit { grid-template-columns: minmax(0, 1fr); }
+  .menu { gap: 36px; }
+  section { padding-top: 56px; }
+  .facts div { grid-template-columns: 7rem minmax(0, 1fr); }
 }
 </style>
 </head>
 <body>
 
-<div class="top-strip">
-<div class="top-strip-content">
-<span>🚚 Cash on Delivery • Free Shipping</span>
-<span>🚚 Cash on Delivery • Free Shipping</span>
-<span>🚚 Cash on Delivery • Free Shipping</span>
-</div>
-</div>
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="#top">Tamarind Lane</a>
+    <nav aria-label="Sections">
+      <a href="#menu">Menu</a>
+      <a href="#about">About</a>
+      <a href="#visit">Visit</a>
+    </nav>
+  </div>
+</header>
 
-<div class="container">
+<main id="top">
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <p class="label">Café &amp; roastery · Sample page</p>
+        <h1>Tamarind <span>Lane</span></h1>
+        <p class="lede">Filter kaapi, kulhad chai and a short, honest food menu. Pull up a stool by the window and stay a while.</p>
+        <div class="status" id="status" data-state="closed" role="status" aria-live="polite">
+          <span class="dot" aria-hidden="true"></span>
+          <span id="status-text">Checking hours…</span>
+        </div>
+      </div>
+      <svg class="cup" viewBox="0 0 320 320" role="img" aria-label="Top-down view of a cup of coffee with latte art">
+        <circle class="saucer" cx="160" cy="160" r="150"/>
+        <circle class="body" cx="160" cy="160" r="104"/>
+        <rect class="body" x="252" y="140" width="62" height="40" rx="20"/>
+        <circle class="coffee" cx="160" cy="160" r="88"/>
+        <path class="art" d="M160 118 C 132 130, 132 168, 160 204 C 188 168, 188 130, 160 118 Z"/>
+        <path class="art" d="M160 140 L160 192"/>
+        <circle class="accent" cx="266" cy="160" r="6"/>
+      </svg>
+    </div>
+  </div>
 
-<div class="badge">⚡ NEW ARRIVAL</div>
-<h1>BREAK YOUR <br><span class="green">RULES</span></h1>
-<p class="tag">NOT YOUR LIMITS</p>
+  <section id="menu" aria-labelledby="menu-h">
+    <div class="wrap">
+      <div class="head">
+        <p class="label">What we serve</p>
+        <h2 id="menu-h">The menu</h2>
+        <p>Everything is made in small batches through the morning. When it sells out, it sells out.</p>
+      </div>
+      <div class="menu">
+        <div class="group">
+          <h3>Coffee <small>₹</small></h3>
+          <div class="item"><b>Filter Kaapi <span class="tag">House</span></b><span class="price">70</span><p class="desc">Decoction brewed strong, poured over hot milk and jaggery-free sugar. Served in a steel tumbler and dabara.</p></div>
+          <div class="item"><b>Cortado</b><span class="price">140</span><p class="desc">Double ristretto cut with a splash of steamed milk.</p></div>
+          <div class="item"><b>Flat White</b><span class="price">170</span><p class="desc">Silky microfoam over a double shot of our medium roast.</p></div>
+          <div class="item"><b>Cold Brew</b><span class="price">190</span><p class="desc">Steeped 18 hours, served over ice with a curl of orange peel.</p></div>
+        </div>
+        <div class="group">
+          <h3>Chai <small>₹</small></h3>
+          <div class="item"><b>Masala Chai</b><span class="price">60</span><p class="desc">Assam, ginger, green cardamom and a little black pepper.</p></div>
+          <div class="item"><b>Kulhad Chai <span class="tag">Popular</span></b><span class="price">80</span><p class="desc">Boiled thick in milk and poured into an unglazed clay cup.</p></div>
+          <div class="item"><b>Irani Chai</b><span class="price">90</span><p class="desc">Slow-simmered with mawa for a rounder, sweeter finish.</p></div>
+          <div class="item"><b>Lemongrass Ginger</b><span class="price">80</span><p class="desc">Milk-free, lightly sweetened with honey.</p></div>
+        </div>
+        <div class="group">
+          <h3>Food <small>₹</small></h3>
+          <div class="item"><b>Maska Pav</b><span class="price">90</span><p class="desc">Soft pav, griddled in salted butter. Best dunked in chai.</p></div>
+          <div class="item"><b>Egg Bun Omelette</b><span class="price">150</span><p class="desc">Masala omelette folded into a toasted bun with green chutney.</p></div>
+          <div class="item"><b>Veg Grilled Sandwich</b><span class="price">170</span><p class="desc">Beetroot, cucumber, tomato and mint chutney on multigrain.</p></div>
+          <div class="item"><b>Mushroom Garlic Toast</b><span class="price">220</span><p class="desc">Sautéed button mushrooms and cheddar on sourdough.</p></div>
+        </div>
+        <div class="group">
+          <h3>Sweet <small>₹</small></h3>
+          <div class="item"><b>Banana Bread</b><span class="price">120</span><p class="desc">Baked daily, served warm with salted butter.</p></div>
+          <div class="item"><b>Ragi Brownie</b><span class="price">130</span><p class="desc">Dense and not too sweet, with roasted ragi and dark chocolate.</p></div>
+          <div class="item"><b>Basque Cheesecake</b><span class="price">240</span><p class="desc">Burnt top, creamy centre. One slice per order, sorry.</p></div>
+        </div>
+      </div>
+      <p class="note">Sample menu and prices. Swap in your own items before you publish.</p>
+    </div>
+  </section>
 
-<img id="mainImage" class="main-shirt" src="back.png">
+  <section id="about" aria-labelledby="about-h">
+    <div class="wrap">
+      <div class="head">
+        <p class="label">Our story</p>
+        <h2 id="about-h">A corner shop with a roaster in the back</h2>
+      </div>
+      <div class="about">
+        <div class="copy">
+          <p>Tamarind Lane started as a single table and a two-kilo roaster. We buy green coffee from estates in Chikmagalur and Coorg, roast it a few days a week, and brew it the way we like it at home.</p>
+          <p>The chai comes from the other half of the family: a recipe that has been boiled on the same stove for three generations.</p>
+          <p>Come for a quick cup, or bring a book and take the corner seat.</p>
+        </div>
+        <dl class="facts">
+          <div><dt>Coffee</dt><dd>Arabica from Chikmagalur and Coorg, roasted in-house</dd></div>
+          <div><dt>Milk</dt><dd>Local dairy, plus oat on request</dd></div>
+          <div><dt>Seating</dt><dd>22 seats, 6 at the window bar</dd></div>
+          <div><dt>Wi-Fi</dt><dd>Free, with sockets along the back wall</dd></div>
+          <div><dt>Payments</dt><dd>UPI, cards and cash</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
 
-<div class="gallery">
-<img src="front.png" onclick="changeImage('front.png')">
-<img src="back.png" onclick="changeImage('back.png')">
-<img src="main.png" onclick="changeImage('main.png')">
-</div>
+  <section id="visit" aria-labelledby="visit-h">
+    <div class="wrap">
+      <div class="head">
+        <p class="label">Find us</p>
+        <h2 id="visit-h">Visit</h2>
+      </div>
+      <div class="visit">
+        <div class="panel">
+          <h3>Opening hours</h3>
+          <dl class="hours" id="hours">
+            <div data-day="Mon"><dt>Monday</dt><dd>8:00 am – 10:00 pm</dd></div>
+            <div data-day="Tue"><dt>Tuesday</dt><dd>8:00 am – 10:00 pm</dd></div>
+            <div data-day="Wed"><dt>Wednesday</dt><dd>8:00 am – 10:00 pm</dd></div>
+            <div data-day="Thu"><dt>Thursday</dt><dd>8:00 am – 10:00 pm</dd></div>
+            <div data-day="Fri"><dt>Friday</dt><dd>8:00 am – 10:00 pm</dd></div>
+            <div data-day="Sat"><dt>Saturday</dt><dd>8:00 am – 11:00 pm</dd></div>
+            <div data-day="Sun"><dt>Sunday</dt><dd>8:00 am – 11:00 pm</dd></div>
+          </dl>
+        </div>
+        <div class="panel contact">
+          <h3>Get in touch</h3>
+          <div>
+            <p class="label">Address</p>
+            <p>12, Tamarind Lane, near the old post office<br>Your City, 000 000</p>
+          </div>
+          <div>
+            <p class="label">Phone</p>
+            <div class="row">
+              <span class="mono" id="phone">+91 00000 00000</span>
+              <button class="btn" id="copy" type="button">Copy number</button>
+            </div>
+          </div>
+          <div>
+            <p class="label">Email</p>
+            <p class="mono">hello@tamarindlane.example</p>
+          </div>
+          <p class="note" style="margin-top:0">Placeholder details. Replace with your real address and contact info.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
 
-<div class="size-box">
-<button class="size active" onclick="selectSize(this)">S</button>
-<button class="size" onclick="selectSize(this)">M</button>
-<button class="size" onclick="selectSize(this)">L</button>
-<button class="size" onclick="selectSize(this)">XL</button>
-<button class="size" onclick="selectSize(this)">XXL</button>
-</div>
-
-<div class="price-box">
-<h2>₹599 <span>₹999</span></h2>
-<p>🔥 Limited Offer</p>
-</div>
-
-<button class="cart-btn" onclick="showCheckout()">ADD TO CART</button>
-
-<div class="feature">
-<div class="feature-icon">✔</div>
-<div class="feature-text">
-<h3>Premium Cotton</h3>
-<p>Soft breathable premium fabric</p>
-</div>
-</div>
-
-<div class="feature">
-<div class="feature-icon">✔</div>
-<div class="feature-text">
-<h3>Bold Print</h3>
-<p>High quality long lasting print</p>
-</div>
-</div>
-
-<div class="box">
-<h2>Product Highlights</h2>
-<div class="detail"><span>Fabric</span><span>Cotton Blend</span></div>
-<div class="detail"><span>Color</span><span>Green</span></div>
-<div class="detail"><span>Fit/Shape</span><span>Loose</span></div>
-<div class="detail"><span>Length</span><span>Regular</span></div>
-</div>
-
-<div class="box">
-<h2>Additional Details</h2>
-<div class="detail"><span>Neck</span><span>Round</span></div>
-<div class="detail"><span>Sleeve Length</span><span>Short Sleeves</span></div>
-<div class="detail"><span>Sleeve Styling</span><span>Regular</span></div>
-<div class="detail"><span>Pattern</span><span>Printed</span></div>
-<div class="detail"><span>Country</span><span>India</span></div>
-</div>
-
-<div class="box">
-<h2>Customer Reviews</h2>
-<div class="rating-card">
-<h1>4.7 ★</h1>
-<p>2,556 ratings</p>
-<p>824 reviews</p>
-</div>
-
-<div class="review">
-<p>Very Good</p>
-<div class="bar"><div class="fill" style="width:89%;background:#00c853;"></div></div>
-</div>
-
-<div class="review">
-<p>Good</p>
-<div class="bar"><div class="fill" style="width:20%;background:#4caf50;"></div></div>
-</div>
-</div>
-
-<div class="box">
-<h2>Customer Testimonials</h2>
-<div class="testimonial">⭐️⭐️⭐️⭐️⭐️ Amazing quality and perfect oversized fit.</div>
-<div class="testimonial">⭐️⭐️⭐️⭐️ Premium print quality.</div>
-<div class="testimonial">⭐️⭐️⭐️⭐️⭐️ Worth every rupee.</div>
-</div>
-
-<div id="checkoutPage" class="box" style="display:none;">
-<h2>Checkout Details</h2>
-
-<div class="size-box">
-<button class="size active" onclick="selectCheckoutSize(this)">S</button>
-<button class="size" onclick="selectCheckoutSize(this)">M</button>
-<button class="size" onclick="selectCheckoutSize(this)">L</button>
-<button class="size" onclick="selectCheckoutSize(this)">XL</button>
-<button class="size" onclick="selectCheckoutSize(this)">XXL</button>
-</div>
-
-<h3>Quantity</h3>
-<div class="size-box">
-<button class="size" onclick="decreaseQty()">-</button>
-<div class="size active" id="qtyBox">1</div>
-<button class="size" onclick="increaseQty()">+</button>
-</div>
-
-<input type="text" placeholder="Full Name" class="input-box">
-<input type="tel" placeholder="Phone Number" class="input-box">
-<input type="text" placeholder="Pincode" class="input-box">
-<input type="text" placeholder="House No / Flat No" class="input-box">
-<input type="text" placeholder="Address" class="input-box">
-<input type="text" placeholder="City" class="input-box">
-<input type="text" placeholder="State" class="input-box">
-
-<button class="cart-btn" onclick="placeOrder()">PLACE ORDER</button>
-</div>
-
-</div>
-
-<div class="success-popup" id="successPopup">
-<div class="success-circle">
-<div class="success-check">✔</div>
-</div>
-<div class="success-title">Order Placed!</div>
-<div class="success-sub">Your order has been received successfully.</div>
-</div>
+<footer>
+  <div class="wrap">
+    <span>© 2026 Tamarind Lane Café</span>
+    <span>Open every day</span>
+  </div>
+</footer>
 
 <script>
-let quantity=1;
+(function () {
+  var hours = { Mon: [480, 1320], Tue: [480, 1320], Wed: [480, 1320], Thu: [480, 1320], Fri: [480, 1320], Sat: [480, 1380], Sun: [480, 1380] };
 
-function changeImage(src){
-document.getElementById("mainImage").src=src;
-}
+  function fmt(mins) {
+    var h = Math.floor(mins / 60), m = mins % 60, ap = h >= 12 ? "pm" : "am";
+    h = h % 12 || 12;
+    return h + ":" + (m < 10 ? "0" : "") + m + " " + ap;
+  }
 
-function selectSize(el){
-document.querySelectorAll('.container > .size-box .size').forEach(btn=>btn.classList.remove('active'));
-el.classList.add('active');
-}
+  function nowInIndia() {
+    var parts = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Asia/Kolkata", weekday: "short", hour: "2-digit", minute: "2-digit", hourCycle: "h23"
+    }).formatToParts(new Date());
+    var out = {};
+    parts.forEach(function (p) { out[p.type] = p.value; });
+    return { day: out.weekday.slice(0, 3), mins: parseInt(out.hour, 10) * 60 + parseInt(out.minute, 10) };
+  }
 
-function selectCheckoutSize(el){
-document.querySelectorAll('#checkoutPage .size').forEach(btn=>{
-if(btn.id!=="qtyBox" && btn.innerText!=="+" && btn.innerText!=="-"){
-btn.classList.remove('active');
-}
-});
-el.classList.add('active');
-}
+  function update() {
+    var t = nowInIndia();
+    var h = hours[t.day];
+    var el = document.getElementById("status");
+    var txt = document.getElementById("status-text");
+    if (!h) { txt.textContent = "Open daily from 8:00 am"; return; }
+    if (t.mins >= h[0] && t.mins < h[1]) {
+      el.setAttribute("data-state", "open");
+      txt.textContent = "Open now · until " + fmt(h[1]);
+    } else {
+      el.setAttribute("data-state", "closed");
+      txt.textContent = "Closed now · opens " + fmt(480);
+    }
+    var rows = document.querySelectorAll("#hours [data-day]");
+    for (var i = 0; i < rows.length; i++) {
+      rows[i].classList.toggle("today", rows[i].getAttribute("data-day") === t.day);
+    }
+  }
+  update();
+  setInterval(update, 60000);
 
-function increaseQty(){
-quantity++;
-document.getElementById("qtyBox").innerText=quantity;
-}
-
-function decreaseQty(){
-if(quantity>1){
-quantity--;
-document.getElementById("qtyBox").innerText=quantity;
-}
-}
-
-function showCheckout(){
-document.getElementById("checkoutPage").style.display="block";
-document.getElementById("checkoutPage").scrollIntoView({behavior:"smooth"});
-}
-
-function placeOrder(){
-let inputs=document.querySelectorAll(".input-box");
-let selectedSize=document.querySelector("#checkoutPage .size.active").innerText;
-
-for(let i=0;i<inputs.length;i++){
-if(inputs[i].value.trim()===""){
-alert("⚠ Please fill all fields");
-return;
-}
-}
-
-let message =
-"🛒 New Order\n\n"+
-"👕 Size: "+selectedSize+"\n"+
-"📦 Quantity: "+quantity+"\n"+
-"👤 Name: "+inputs[0].value+"\n"+
-"📞 Phone: "+inputs[1].value+"\n"+
-"📍 Pincode: "+inputs[2].value+"\n"+
-"🏠 House: "+inputs[3].value+"\n"+
-"📌 Address: "+inputs[4].value+"\n"+
-"🏙 City: "+inputs[5].value+"\n"+
-"🌍 State: "+inputs[6].value;
-
-fetch("https://api.telegram.org/bot8960241914:AAGhDk7erKaa2t8LD3HnCagJKcb12qSeCYI/sendMessage?chat_id=1318634457&text="+encodeURIComponent(message))
-.then(()=>{
-document.getElementById("successPopup").style.display="flex";
-setTimeout(()=>{
-document.getElementById("successPopup").style.display="none";
-},3000);
-})
-.catch(()=>alert("❌ Failed to place order"));
-}
+  var btn = document.getElementById("copy");
+  btn.addEventListener("click", function () {
+    var number = document.getElementById("phone").textContent;
+    function done(msg) { btn.textContent = msg; setTimeout(function () { btn.textContent = "Copy number"; }, 1800); }
+    try {
+      navigator.clipboard.writeText(number).then(function () { done("Copied"); }, function () { select(); });
+    } catch (e) { select(); }
+    function select() {
+      var r = document.createRange(); r.selectNodeContents(document.getElementById("phone"));
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      done("Selected");
+    }
+  });
+})();
 </script>
 
 </body>
